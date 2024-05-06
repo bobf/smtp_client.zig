@@ -1,4 +1,5 @@
 const std = @import("std");
+const builtin = @import("builtin");
 const lib = @import("lib.zig");
 
 const net = std.net;
@@ -57,6 +58,8 @@ pub const Stream = struct {
 	}
 
 	pub fn poll(self: *Stream, timeout: i32) !usize {
+		if (builtin.os.tag == .windows) return 1;
+
 		return posix.poll(&self.pfd, timeout);
 	}
 
